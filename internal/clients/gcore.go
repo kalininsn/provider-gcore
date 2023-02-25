@@ -15,7 +15,7 @@ import (
 
 	"github.com/upbound/upjet/pkg/terraform"
 
-	"github.com/upbound/upjet-provider-template/apis/v1beta1"
+	"github.com/kalininsn/provider-gcore/apis/v1beta1"
 )
 
 const (
@@ -24,7 +24,8 @@ const (
 	errGetProviderConfig    = "cannot get referenced ProviderConfig"
 	errTrackUsage           = "cannot track ProviderConfig usage"
 	errExtractCredentials   = "cannot extract credentials"
-	errUnmarshalCredentials = "cannot unmarshal template credentials as JSON"
+	errUnmarshalCredentials = "cannot unmarshal gcore credentials as JSON"
+    keyPermanentToken       = "permanent_api_token"
 )
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
@@ -61,6 +62,12 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		if err := json.Unmarshal(data, &creds); err != nil {
 			return ps, errors.Wrap(err, errUnmarshalCredentials)
 		}
+
+        ps.Configuration = map[string]any{}
+        if v, ok := creds[keyPermanentToken]; ok {
+           ps.Configuration[keyPermanentToken] = v
+        }
+
 
 		// Set credentials in Terraform provider configuration.
 		/*ps.Configuration = map[string]any{
