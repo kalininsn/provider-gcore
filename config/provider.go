@@ -33,7 +33,7 @@ func GetProvider() *ujconfig.Provider {
 
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
-		network.Configure,
+	network.Configure,
 	} {
 		configure(pc)
 	}

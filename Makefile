@@ -6,7 +6,7 @@ PROJECT_REPO := github.com/gcore/$(PROJECT_NAME)
 
 export TERRAFORM_VERSION := 1.3.3
 
-export TERRAFORM_PROVIDER_SOURCE := G-Core/gcore 
+export TERRAFORM_PROVIDER_SOURCE := G-Core/gcore
 export TERRAFORM_PROVIDER_REPO := https://github.com/G-Core/terraform-provider-gcore
 export TERRAFORM_PROVIDER_VERSION := 0.3.63
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME := gcore
@@ -111,6 +111,7 @@ $(TERRAFORM):
 $(TERRAFORM_PROVIDER_SCHEMA): $(TERRAFORM)
 	@$(INFO) generating provider schema for $(TERRAFORM_PROVIDER_SOURCE) $(TERRAFORM_PROVIDER_VERSION)
 	@mkdir -p $(TERRAFORM_WORKDIR)
+	@echo $(TERRAFORM_WORKDIR)
 	@echo '{"terraform":[{"required_providers":[{"provider":{"source":"'"$(TERRAFORM_PROVIDER_SOURCE)"'","version":"'"$(TERRAFORM_PROVIDER_VERSION)"'"}}],"required_version":"'"$(TERRAFORM_VERSION)"'"}]}' > $(TERRAFORM_WORKDIR)/main.tf.json
 	@$(TERRAFORM) -chdir=$(TERRAFORM_WORKDIR) init > $(TERRAFORM_WORKDIR)/terraform-logs.txt 2>&1
 	@$(TERRAFORM) -chdir=$(TERRAFORM_WORKDIR) providers schema -json=true > $(TERRAFORM_PROVIDER_SCHEMA) 2>> $(TERRAFORM_WORKDIR)/terraform-logs.txt
